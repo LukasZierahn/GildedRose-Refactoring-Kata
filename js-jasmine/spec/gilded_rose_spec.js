@@ -1,10 +1,19 @@
-var {Shop, Item} = require('../src/gilded_rose.js');
+const {Shop, Item} = require('../src/gilded_rose.js');
+
+Jasmine = require('jasmine');
+jasmine = new Jasmine();
+
+jasmine.loadConfigFile('support/jasmine.json');
+
 describe("Gilded Rose", function() {
 
-  it("should foo", function() {
-    const gildedRose = new Shop([ new Item("foo", 0, 0) ]);
+  it("Sulfuras", function() {
+    const gildedRose = new Shop([ new Item("Sulfuras, Hand of Ragnaros", 20, 20) ]);
     const items = gildedRose.updateQuality();
-    expect(items[0].name).toEqual("fixme");
+    expect(items[0].sellIn).toEqual(20);
+    expect(items[0].quality).toEqual(20);
   });
 
 });
+
+jasmine.execute();
