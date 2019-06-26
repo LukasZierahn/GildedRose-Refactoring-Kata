@@ -6,50 +6,53 @@ class Item {
   }
 }
 
+function BackstagePass(item) {
+  item.sellIn = item.sellIn - 1;
+
+  if (item.sellIn < 0) {
+    item.quality = 0;
+    return;
+  }
+
+  item.quality = Math.min(item.quality + 1, 50);
+  if (item.sellIn < 11) {
+    item.quality = Math.min(item.quality + 1, 50);
+    if (item.sellIn < 6) {
+      item.quality = Math.min(item.quality + 1, 50);
+    }
+  }
+
+  
+}
+
 class Shop {
+  legendaryItems = ['Sulfuras, Hand of Ragnaros']
+  increasingQuality = ['Aged Brie']
+
+  specialItems = { 'Backstage passes to a TAFKAL80ETC concert' : BackstagePass }
+
   constructor(items=[]){
     this.items = items;
   }
-  
+
   updateQuality() {
     for (var item of this.items) {
 
-      if (item.name != 'Aged Brie' && item.name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (item.name != 'Sulfuras, Hand of Ragnaros') {
-          item.quality = max(item.quality - 1, 0);
-        }
+      if (item in this.specialItems) {
+        this.specialItems[item](item);
+        continue;
+      }
+
+      if (item in this.legendaryItems) {
+        continue;
+      }
+
+      item.sellIn = item.sellIn - 1;
+
+      if (item in this.increasingQuality) {
+        item.quality = Math.min(item.quality + 1, 50);
       } else {
-        item.quality = min(item.quality + 1, 50);
-        if (item.name == 'Backstage passes to a TAFKAL80ETC concert') {
-          if (item.sellIn < 11) {
-            item.quality = min(item.quality + 1, 50);
-            if (item.sellIn < 6) {
-              item.quality = min(item.quality + 1, 50);
-            }
-          }
-        }
-      }
-
-      if (item.name != 'Sulfuras, Hand of Ragnaros') {
-        item.sellIn = item.sellIn - 1;
-      }
-
-      if (item.sellIn < 0) {
-        if (item.name != 'Aged Brie') {
-          if (item.name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (item.quality > 0) {
-              if (item.name != 'Sulfuras, Hand of Ragnaros') {
-                item.quality = item.quality - 1;
-              }
-            }
-          } else {
-            item.quality = 0;
-          }
-        } else {
-          if (item.quality < 50) {
-            item.quality = item.quality + 1;
-          }
-        }
+        item.quality = Math.max(item.quality - 1, 0);
       }
     }
 
